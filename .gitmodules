@@ -1,3 +1,6 @@
 [submodule "NetKit"]
 	path = NetKit
 	url = https://github.com/tdgunes/NetKit.git
+[submodule "UIColor-Hex-Swift"]
+	path = UIColor-Hex-Swift
+	url = https://github.com/yeahdongcn/UIColor-Hex-Swift.git
