@@ -19,7 +19,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var timer: Timer!
     var locationManager = CLLocationManager()
     var routerService = RouterService()
-    
+    var areas:[Area] = []
     // MARK: UIView functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,8 +27,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         self.progressView.setProgress(0, animated: false)
         timer = Timer(interval: 2, operation: self.sendCurrentLocation, tickOperation: self.updateProgressBar)
-        timer.start()
-
+        // timer.start()
+        
+        routerService.onSuccessCallback = self.onNewAreas
         
     }
     
@@ -37,6 +38,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.didReceiveMemoryWarning()
         
     }
+    
+    // MARK: Router Service Callback
+    
+    func onNewAreas(areas:[Area]) {
+        self.areas = areas
+        self.tableView.reloadData()
+        self.timer.stop()
+        self.progressLabel.text = "Fetching policies from polservers"
+        self.progressView.setProgress(0, animated: true)
+    }
+    
     
     // MARK: Location Services
     
@@ -86,11 +98,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return cell
     }
     
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let area = self.areas[section]
+        return "\(area.name) - \(area.url)"
+    }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 0
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 0
+        return self.areas.count
     }
 }

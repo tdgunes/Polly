@@ -14,10 +14,10 @@ class RouterService {
     
     let nkit = NetKit(baseURL: "http://127.0.0.1:8080/api")
     
-    var onSuccessCallback: (()->())?
+    var onSuccessCallback: (([Area])->())?
     var onErrorCallback: (()->())?
     
-    init(successCallback: (()->())? = nil, errorCallback: (()->())? = nil) {
+    init(successCallback: (([Area])->())? = nil, errorCallback: (()->())? = nil) {
         self.onSuccessCallback = successCallback
         self.onErrorCallback = errorCallback
     }
@@ -43,7 +43,23 @@ class RouterService {
         println(response.string!)
         
         if let callback = self.onSuccessCallback {
-            callback()
+            if let json = response.json {
+                if let jsonAreas = json["area"].asArray { //FIXME: Must get only on area and ask to the server
+                    var areas:[Area] = []
+                    for jsonArea in jsonAreas{
+                        if let name = jsonArea["name"].asString,
+                           let url = jsonArea["url"].asString,
+                           let level = jsonArea["level"].asString {
+                            
+                           let area = Area(name: name, url: url, level: level)
+                           areas.append(area)
+                        }
+                       
+                    }
+                    callback(areas)
+                }
+            }
+
         }
     }
     

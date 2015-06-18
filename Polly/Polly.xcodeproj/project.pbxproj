@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D9B7E621B32E77F00B11BAD /* Area.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9B7E611B32E77F00B11BAD /* Area.swift */; };
 		3DCCC4D61B31F0D500FECD9F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DCCC4D51B31F0D500FECD9F /* AppDelegate.swift */; };
 		3DCCC4D81B31F0D500FECD9F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DCCC4D71B31F0D500FECD9F /* ViewController.swift */; };
 		3DCCC4DB1B31F0D500FECD9F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3DCCC4D91B31F0D500FECD9F /* Main.storyboard */; };
@@ -34,6 +35,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3D9B7E611B32E77F00B11BAD /* Area.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Area.swift; sourceTree = "<group>"; };
 		3DCCC4D01B31F0D500FECD9F /* Polly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Polly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DCCC4D41B31F0D500FECD9F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3DCCC4D51B31F0D500FECD9F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 				3DCCC4FA1B32272800FECD9F /* PolicyService.swift */,
 				3DCCC5021B32293400FECD9F /* RouterService.swift */,
 				3DCCC4FC1B32273300FECD9F /* Policy.swift */,
+				3D9B7E611B32E77F00B11BAD /* Area.swift */,
 			);
 			path = Polly;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 				3DCCC4FB1B32272800FECD9F /* PolicyService.swift in Sources */,
 				3DCCC4F71B31F0F700FECD9F /* NetKit.swift in Sources */,
 				3DCCC4F91B31F79A00FECD9F /* Timer.swift in Sources */,
+				3D9B7E621B32E77F00B11BAD /* Area.swift in Sources */,
 				3DCCC4FD1B32273300FECD9F /* Policy.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -467,6 +471,7 @@
 				3DCCC4F11B31F0D500FECD9F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3DCCC4F21B31F0D500FECD9F /* Build configuration list for PBXNativeTarget "PollyTests" */ = {
 			isa = XCConfigurationList;
@@ -475,6 +480,7 @@
 				3DCCC4F41B31F0D500FECD9F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
