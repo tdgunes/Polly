@@ -9,6 +9,7 @@
 import UIKit
 
 var UUID:String?
+let IS_TARGET_IPHONE_SIMULATOR = (TARGET_IPHONE_SIMULATOR != 0)
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

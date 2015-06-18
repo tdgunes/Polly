@@ -21,4 +21,8 @@ class Area {
         self.url = url
         self.level = level
     }
+    
+    func addPolicy(policy:Policy) {
+        self.policies.append(policy)
+    }
 }

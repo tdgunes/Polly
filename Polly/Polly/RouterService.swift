@@ -12,18 +12,22 @@ import MapKit
 
 class RouterService {
     
-    let nkit = NetKit(baseURL: "http://127.0.0.1:8080/api")
+    var nkit = NetKit(baseURL: "http://127.0.0.1:8080")
     
-    var onSuccessCallback: (([Area])->())?
+    var onSuccessCallback: ((Area)->())?
     var onErrorCallback: (()->())?
     
-    init(successCallback: (([Area])->())? = nil, errorCallback: (()->())? = nil) {
+    init(successCallback: ((Area)->())? = nil, errorCallback: (()->())? = nil) {
         self.onSuccessCallback = successCallback
         self.onErrorCallback = errorCallback
+        
+        if (!IS_TARGET_IPHONE_SIMULATOR){
+            nkit.baseURL = "http://192.168.1.44:8080"
+        }
     }
     
     func sendLocation(location:CLLocation) {
-        let apiMethod = "/associated"
+        let apiMethod = "/api/associated"
         let locationString = "POINT(\(location.coordinate.longitude) \(location.coordinate.latitude))"
         let payload = ["location": locationString, "device_id":UUID!]
         let payloadJSON = JSON(payload)
@@ -41,23 +45,22 @@ class RouterService {
     
     func onSuccess(response:NKResponse) {
         println(response.string!)
-        
+    
         if let callback = self.onSuccessCallback {
             if let json = response.json {
-                if let jsonAreas = json["area"].asArray { //FIXME: Must get only on area and ask to the server
-                    var areas:[Area] = []
-                    for jsonArea in jsonAreas{
-                        if let name = jsonArea["name"].asString,
-                           let url = jsonArea["url"].asString,
-                           let level = jsonArea["level"].asString {
-                            
-                           let area = Area(name: name, url: url, level: level)
-                           areas.append(area)
-                        }
-                       
-                    }
-                    callback(areas)
+
+
+                if let name = json["area"]["name"].asString,
+                   let url = json["area"]["url"].asString,
+                   let level = json["area"]["level"].asString {
+                    
+                   let area = Area(name: name, url: url, level: level)
+                   callback(area)
                 }
+                       
+                    
+                
+                
             }
 
         }

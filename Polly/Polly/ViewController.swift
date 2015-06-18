@@ -19,7 +19,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var timer: Timer!
     var locationManager = CLLocationManager()
     var routerService = RouterService()
-    var areas:[Area] = []
+    var policyService = PolicyService()
+    
+    var areas:[Area] = [] //with policies
     // MARK: UIView functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,7 +32,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // timer.start()
         
         routerService.onSuccessCallback = self.onNewAreas
+        policyService.onSuccessCallback = self.onNewPolicies
         
+        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.estimatedRowHeight = 44.0
     }
     
 
@@ -39,14 +44,29 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
     }
     
-    // MARK: Router Service Callback
+    // MARK: Policy Service Callback
     
-    func onNewAreas(areas:[Area]) {
+    func onNewPolicies(areas:[Area]){
         self.areas = areas
         self.tableView.reloadData()
+        self.progressLabel.text = "Succesfully got policies of this region"
+        
+    }
+    
+    
+    // MARK: Router Service Callback
+    
+    func onNewAreas(routedArea:Area) {
+
+
         self.timer.stop()
-        self.progressLabel.text = "Fetching policies from polservers"
+        self.progressLabel.text = "Fetching policies from \(routedArea.name)"
         self.progressView.setProgress(0, animated: true)
+        
+        
+        policyService.setURL(routedArea.url)
+        policyService.fetchPolicies()
+        
     }
     
     
@@ -93,7 +113,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // MARK: TableView callbacks
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as! UITableViewCell
-        
+        let area = self.areas[indexPath.section]
+        let policy = area.policies[indexPath.row]
+        cell.textLabel?.text = policy.text
         
         return cell
     }
@@ -104,7 +126,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        let area = self.areas[section]
+        return area.policies.count
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
