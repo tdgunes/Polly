@@ -12,6 +12,11 @@ import CoreLocation
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     let cellIdentifier = "policyCell"
     
+    let urlAttributes = [NSForegroundColorAttributeName: UIColor.grayColor(),  NSFontAttributeName: UIFont.italicSystemFontOfSize(13)]
+    let nameAttributes = [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont.boldSystemFontOfSize(15)]
+
+    
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var progressLabel: UILabel!
@@ -20,6 +25,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var locationManager = CLLocationManager()
     var routerService = RouterService()
     var policyService = PolicyService()
+    var beaconService = BeaconService()
     
     var areas:[Area] = [] //with policies
     // MARK: UIView functions
@@ -32,10 +38,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // timer.start()
         
         routerService.onSuccessCallback = self.onNewAreas
+        beaconService.onSuccessCallback = self.onNewBeacons
         policyService.onSuccessCallback = self.onNewPolicies
         
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 44.0
+        
+        self.tableView.tableFooterView = UIView(frame: CGRectZero)
     }
     
 
@@ -43,6 +52,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.didReceiveMemoryWarning()
         
     }
+    
+
     
     // MARK: Policy Service Callback
     
@@ -54,18 +65,35 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     
+    // MARK: Beacon Service Callback
+    
+    func onNewBeacons(beacons:[Beacon]){
+        println("Got \(beacons.count) beacon(s), registering...")
+        
+        self.progressLabel.text = "Got \(beacons.count) beacon(s), fetching policies..."
+        sleep(1)
+        if (beacons.count > 0) {
+            policyService.closestBeaconUUID = beacons[0].uuid
+        }
+        
+        policyService.setURL(beaconService.nkit.baseURL)
+        policyService.fetchPolicies()
+    }
+    
+    
     // MARK: Router Service Callback
     
     func onNewAreas(routedArea:Area) {
 
 
         self.timer.stop()
-        self.progressLabel.text = "Fetching policies from \(routedArea.name)"
+        self.progressLabel.text = "Fetching beacons from \(routedArea.name)"
         self.progressView.setProgress(0, animated: true)
+        sleep(1)
         
         
-        policyService.setURL(routedArea.url)
-        policyService.fetchPolicies()
+        beaconService.setURL(routedArea.url)
+        beaconService.fetchBeacons()
         
     }
     
@@ -111,6 +139,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     // MARK: TableView callbacks
+    
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as! UITableViewCell
         let area = self.areas[indexPath.section]
@@ -133,4 +163,26 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return self.areas.count
     }
+    
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let area = self.areas[section]
+
+        let string = self.tableView(self.tableView, titleForHeaderInSection: section)! as NSString
+        var attributedString = NSMutableAttributedString(string: string as String )
+        
+        attributedString.addAttributes(nameAttributes, range: string.rangeOfString(area.name))
+        attributedString.addAttributes(urlAttributes, range: string.rangeOfString(area.url))
+
+        
+        var label = UILabel()
+        label.frame = CGRectMake(20, 8, 320, 18)
+        label.attributedText = attributedString
+        var headerView = UIView()
+        headerView.tintColor = UIColor(red: 189/255.0, green: 195/255.0, blue: 199/255.0, alpha: 1.0)
+        headerView.addSubview(label)
+        return headerView
+    }
+    
+
+    
 }

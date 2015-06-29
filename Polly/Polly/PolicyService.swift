@@ -10,6 +10,7 @@ import Foundation
 
 class PolicyService {
     var nkit = NetKit()
+    var closestBeaconUUID:String?
     
     var onSuccessCallback: (([Area])->())?
     var onErrorCallback: (()->())?
@@ -22,14 +23,19 @@ class PolicyService {
     func setURL(url:String){
         nkit.baseURL = url
         if !IS_TARGET_IPHONE_SIMULATOR {
-            nkit.baseURL = url.stringByReplacingOccurrencesOfString("127.0.0.1", withString: "192.168.1.44")
+            nkit.baseURL = url.stringByReplacingOccurrencesOfString("127.0.0.1", withString: "192.168.1.109")
         }
 
     }
     
     func fetchPolicies(){
         let apiMethod = "/api/policies/all"
-        nkit.get( url: apiMethod, completionHandler: self.onSuccess, errorHandler: self.onError)
+        var payload:[String:String] = [:]
+        if let uuid = closestBeaconUUID {
+            payload["uuid"] = uuid
+        }
+        
+        nkit.post(data:JSON(payload), url: apiMethod, completionHandler: self.onSuccess, errorHandler: self.onError)
     }
     
     func onError(nkerror:NKError, nserror:NSError?) {

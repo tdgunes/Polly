@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no" ?>
+<gpx creator="WTracks" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.topografix.com/GPX/1/1" version="1.1" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+<metadata>
+  <name>New Track</name>
+  <desc></desc>
+  <author><name>WTracks - Online GPX track editor</name></author>
+  <link href="http://wtracks.appspot.com/">
+    <text>WTracks</text>
+    <type>text/html</type>
+  </link>
+  <time>2015-06-29T06-01-55Z</time>
+<bounds minlat="39.28010491220616" minlon="27.303600311279297" maxlat="41.46434108514979" maxlon="36.4991569519043"/></metadata>
+<trk><name>New Track</name><trkseg>
+  <trkpt lat="41.000629848685385" lon="28.970947265625"><ele>0</ele><time>P0S</time></trkpt>
+  <trkpt lat="40.18726672309203" lon="29.06982421875"><ele>0</ele><time>P3H22M4S</time></trkpt>
+  <trkpt lat="39.75787999202175" lon="30.4541015625"><ele>0</ele><time>P8H5M10S</time></trkpt>
+</trkseg></trk></gpx>
+

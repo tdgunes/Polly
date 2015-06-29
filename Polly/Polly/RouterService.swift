@@ -22,7 +22,7 @@ class RouterService {
         self.onErrorCallback = errorCallback
         
         if (!IS_TARGET_IPHONE_SIMULATOR){
-            nkit.baseURL = "http://192.168.1.44:8080"
+            nkit.baseURL = "http://192.168.1.109:8080"
         }
     }
     
